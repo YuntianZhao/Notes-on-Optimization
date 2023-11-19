@@ -271,6 +271,7 @@
     	%postheadspace={.5em plus .1em minus .1em},
     	%prefoothook={\hfill\qedsymbol}
     ]{kaoplain}
+
     \declaretheoremstyle[
     	spaceabove=.6\thm@preskip,
     	spacebelow=.1\thm@postskip,
@@ -282,6 +283,19 @@
     	%postheadspace={.5em plus .1em minus .1em},
     	%prefoothook={\hfill\qedsymbol}
     ]{kaodefinition}
+	
+	\declaretheoremstyle[
+    	spaceabove=.5\thm@preskip,
+    	spacebelow=.5\thm@postskip,
+    	%headfont=\normalfont\bfseries,%\scshape,
+    	%notefont=\normalfont, notebraces={ (}{)},
+    	bodyfont=\normalfont\itshape,
+    	%headformat={\NAME\space\NUMBER\space\NOTE},
+    	headpunct={},
+    	% postheadspace={.5em plus .1em minus .1em},
+    	%prefoothook={\hfill\qedsymbol}
+    ]{kaoassumption}
+
     \declaretheoremstyle[
     	spaceabove=.6\thm@preskip,
     	spacebelow=.1\thm@postskip,
@@ -295,6 +309,7 @@
     	%refname={theorem,theorems},
     	%Refname={Theorem,Theorems},
     ]{kaoremark}
+
     \declaretheoremstyle[
     	spaceabove=.6\thm@preskip,
     	spacebelow=.1\thm@postskip,
@@ -308,6 +323,7 @@
     	%refname={theorem,theorems},
     	%Refname={Theorem,Theorems},
     ]{kaoexample}
+
     \declaretheoremstyle[
     	%spaceabove=.5\thm@preskip,
     	%spacebelow=.5\thm@postskip,
@@ -329,18 +345,21 @@
     	Refname={Theorem,Theorems},
     	numberwithin=section,
     ]{theorem}
+
     \declaretheorem[
     	name=Proposition,
     	refname={proposition,propositions},
     	Refname={Proposition,Propositions},
     	sibling=theorem,
     ]{proposition}
-    \declaretheorem[
+    
+	\declaretheorem[
     	name=Lemma,
     	refname={lemma,lemmas},
     	Refname={Lemma,Lemmas},
     	sibling=theorem,
     ]{lemma}
+
     \declaretheorem[
     	name=Corollary,
     	refname={corollary,corollaries},
@@ -355,6 +374,14 @@
     	Refname={Definition,Definitions},
     	numberwithin=section,
     ]{definition}
+
+	\theoremstyle{kaoassumption}
+    \declaretheorem[
+    	name=Assumption,
+    	refname={assumption,assumptions},
+    	Refname={Assumption,Assumptions},
+    	numberwithin=section,
+    ]{assumption}
 
     \theoremstyle{kaoremark}
     \declaretheorem[
