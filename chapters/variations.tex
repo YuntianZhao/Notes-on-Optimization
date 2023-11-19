@@ -1,0 +1,484 @@
+\setchapterstyle{kao}
+\setchapterpreamble[u]{\margintoc}
+\chapter{Variations}
+\labch{variations}
+
+\section{Unconstrained minimizer}
+
+\begin{definition}[Unconstrained optimization]
+\labdef{unconstrained_optimization}
+\index{unconstrained optimization}
+A point $x_0 \in \R^n$ is a minimizer of the function $f: \R^n \to \R$ if $f(x0) \le f(x)$ for all $x \in \R^n$.
+And we write 
+\begin{align}
+f(x_0) = \min_{x\in\R^n} f(x).
+\end{align}
+\end{definition}
+
+\subsection{First variation}
+
+\begin{theorem}[First variation]
+Assume that $f: \R^n \to \R$ is differentiable and $x_0$ is a minimizer.
+Then
+\begin{align}
+\grad f(x_0) = 0.
+\end{align}
+Equivalently, we have
+\begin{align}
+\frac{\pp f}{\pp x_i} f(x_0) = 0, \quad i = 1, \dots, n.
+\end{align}
+\end{theorem}
+
+\begin{proof}
+Let us define $\phi(t) = f(x_0 + ty)$.
+Since $x_0$ is a minimizer,
+\begin{align}
+\phi(0) = f(x_0) \le f(x_0 + ty) = \phi(t)
+\end{align}
+we apply the chain rule from multivariable calculus:
+\begin{align}
+\phi'(t) = \sum _{i=1}^{n} \frac{\pp f}{\pp x_i} f(x_0 + ty) y_i.
+\end{align}
+For $t=0$ and all $y \in \R^n$,
+\begin{align}
+0 = \phi'(0) &= \sum _{i=1}^{n} \frac{\pp f}{\pp x_i} f(x_0) y_i = \grad f(x_0) ^T y.
+\end{align}
+Finally, by taking $y=\grad f(x_0)$, we have $\grad f(x_0) = 0$.
+\end{proof}
+
+\begin{definition}[Critical point, extremal]
+\index{cirtical point}
+\index{extremal}
+A point $x \in \R^n$ is called a critical point (or an extremal) of $f$ if $\grad f(x)=0$.
+\end{definition}
+
+\begin{remark}
+For a differentiable function $f$, if $x_0$ is a minimizer, then it is a critical point.
+\end{remark}
+
+\subsection{Second variation}
+
+\begin{definition}
+\labdef{nonnegative_definite}
+A symmetric $n \times n$ matrix $A$ is nonnegative definite if for all $y \in \R^n$, 
+\begin{align}
+y^T A y = \sum_{i=1}^{n} \sum_{j=1}^{n} a_{ij}y_{i}y_{j} \ge 0.
+\end{align}
+And in this case, we write
+\begin{align}
+A \succeq 0.
+\end{align}
+\end{definition}
+
+\begin{theorem}[Second variation]
+Assume $f: \R^n \to \R$ is twice differentiable and $x_0$ is a minimizer.
+Then
+\begin{align}
+\grad^2 f(x_0) \succeq 0.
+\end{align}
+\end{theorem}
+
+\begin{proof}
+Define $\phi(t) = f(x_0 + ty)$.
+we again apply the chain rule from multivariable calculus:
+\begin{align}
+\phi''(t) = \sum_{i=1}^{n}\sum_{j=1}^{n} \frac{\pp ^2 f}{\pp x_i \pp x_j} (x_0 + t y) y_i y_j.
+\end{align}
+Since $t = 0$ is a minimizer of $\phi$ which suggests $\phi''(0) \ge 0$, we have
+\begin{align}
+\phi''(0) = \sum_{i=1}^{n}\sum_{j=1}^{n} \frac{\pp ^2 f}{\pp x_i \pp x_j} (x_0) y_i y_j \ge 0.
+\end{align}
+By \refdef{nonnegative_definite}, $\grad^2 f(x_0) \succeq 0$.
+\end{proof}
+
+\section{Equality constraints}
+
+We turn our attention now to optimization problems with constraints.
+We assume $f, g_1, \dots, g_m : \R^n \to \R$ are twice continuously differentiable functions.
+Then we define $g:\R^n \to \R^m$ by
+
+\begin{align}
+g = \begin{bmatrix}
+g_1\\
+\vdots\\
+g_m\\
+\end{bmatrix}.
+\end{align}
+
+Then the gradient of $g$ is
+
+\begin{align}
+\grad g = \begin{bmatrix}
+(\grad g_1)^T\\
+\vdots\\
+(\grad g_m)^T\\
+\end{bmatrix}
+= \begin{bmatrix}
+\frac{\pp g_1}{\pp x_1} & \cdots & \frac{\pp g_1}{\pp x_n} \\
+\vdots & \ddots & \vdots \\
+\frac{\pp g_m}{\pp x_1} & \cdots & \frac{\pp g_m}{\pp x_n} \\
+\end{bmatrix}.
+\end{align}
+This is an $m \times n$ matrix-valued function.
+
+\begin{definition}[Constrained optimization]
+\labdef{constrained_optimization}
+A constrained optimization problem is to find $x_0 \in \R^n$ that
+\begin{align}
+\min_{x\in\R^n} \ & f(x) \\
+\st & g(x) = 0.
+\end{align}
+\end{definition}
+
+\begin{definition}
+A point $x \in \R^n$ is called feasible for if $g(x) = 0$; that is, if $g_k(x) = 0$ for $k = 1, \dots, m$.
+\end{definition}
+
+\subsection{Lagrange multipliers}
+
+The method of Lagrange multipliers reveals a linear relationship between the gradients of $f, g1, \dots, gm$ at a minimizer $x_0$.
+
+\subsection{Constrained first variation}
+
+\begin{theorem}[F. John's form of the constrained first variation formula]
+\labthm{FJ_constrained_first_variation_formula}
+Suppose $x_0$ solves the constrained optimization problem defined in \refdef{constrained_optimization}.
+Then there exist real numbers $\gamma_0, \lambda_0^1, \dots, \lambda_0^m$ (not all equal to 0) such that
+\begin{align}
+\gamma_0 \grad f(x_0) + \sum_{k=1}^{n} \lambda_0^k \grad g_k(x_0) = 0.
+\end{align}
+By defining $\lambda_0 = [ \lambda_0^1 \dots \lambda_0^m ]^T$, equivalently we have
+\begin{align}
+\gamma_0 \grad f(x_0) + \lambda_0^T \grad g(x_0) = 0. \labeq{FJcfvf_mat}
+\end{align}
+\end{theorem}
+
+\begin{remark}
+When $\gamma_0 = 0$, we call it an abnormal multiplier.
+If $\gamma_0 \neq 0$, it is a normal multiplier, in which case we can divide and convert to the case $\gamma_0 = 1$ (for possibly new constants $\lambda_0^1, \dots, \lambda_0^m$.)
+\end{remark}
+
+\begin{proof}
+Step 1: Fix $\beta >0$.
+For each $\alpha>0$, define
+\begin{align}
+F^{\alpha}(x) = f(x) + \frac{\alpha}{2} |g(x)|^2 + \frac{\beta}{2} |x-x_0|^2
+\labeq{proof_FJcfvf_eq_1}
+\end{align}
+We will later send $\alpha \to \infty$; this procedure is the penalty method.
+Let $B=\{ x \in \R^n : |x-x_0| \le 1 \}$. 
+The Extreme Value Theorem tells us that for continuous $F^\alpha: B\to\R$ and closed and bounded $B$, there exists $x_\alpha$ that minimizes $F^\alpha$.
+Then we have $F^\alpha(x_\alpha) = \min _{x \in B} F^\alpha(x)$.
+\begin{align}
+f(x_\alpha) + \frac{\alpha}{2} |g(x_\alpha)|^2 + \frac{\beta}{2} |x_\alpha-x_0|^2 = F^{\alpha}(x_\alpha) \le F^{\alpha}(x_0) = f(x_0),
+\labeq{proof_FJcfvf_eq_2}
+\end{align}
+since $g(x_0) = 0$.
+Because $\alpha |g(x_\alpha)|^2 \le 2 (f(x_0) - f(x_\alpha)) - \beta |x_\alpha-x_0|^2$, $\{ \alpha |g(x_\alpha)|^2 \} _{\alpha > 0}$ is bounded.
+Consequently,
+\begin{align}
+\lim _{\alpha \to \infty} g(x_\alpha) = 0.
+\labeq{proof_FJcfvf_eq_3}
+\end{align}
+
+Step 2: Next, we use the Bolzano-Weierstrass Theorem to select a convergent subsequence $\{ x_{\alpha_j} \}_{j=1}^{\infty}$ from $\{ x_{\alpha} \} \subset B$ so that $x_{\alpha_j} \to \bar{x}$ as $\alpha_j \to \infty$, for some $\bar{x} \in B$.
+\refeq{proof_FJcfvf_eq_3} shows that $g(\bar{x})=0$ and therefore $\bar{x}$ is feasible.
+Hence $f(x_0) \le f(\bar{x})$
+Moreover, \refeq{proof_FJcfvf_eq_2} gives 
+\begin{align}
+f(\bar{x}) + \frac{\beta}{2} |\bar{x}-x_0|^2 \le f(x_0) \le f(\bar{x}),
+\labeq{proof_FJcfvf_eq_4}
+\end{align}
+which means that $|\bar{x}-x_0|^2 = 0$.
+So, $\bar{x} = x_0$.
+This is true for all convergent subsequences $x_{\alpha_j} \to \bar{x}$ and consequently 
+\begin{align}
+\lim_{\alpha \to \infty} x_{\alpha} = x_0.
+\labeq{proof_FJcfvf_eq_5}
+\end{align}
+
+Step 3: So if $\alpha$ is large enough, $F^\alpha$ has a minimum over $B$ at point $x_\alpha$.
+And in view of \refeq{proof_FJcfvf_eq_5}, $x_\alpha$ does not lie on the boundary of $B$.
+It follows that\sidenote{
+We have
+\begin{align*}
+\grad \left( \frac{|g(x)|^2}{2} \right) 
+&= \grad \left( \frac{1}{2} \sum_{i} g_i(x)^2 \right) \\
+&= \begin{bmatrix}
+\frac{1}{2} \frac{\pp}{\pp x_1} \sum_{i} g_i (x)^2 \\
+\vdots \\
+\frac{1}{2} \frac{\pp}{\pp x_n} \sum_{i} g_i (x)^2 \\
+\end{bmatrix} \\
+&= \begin{bmatrix}
+\sum_{i} g_i (x) \frac{\pp g_i (x)}{\pp x_1} \\
+\vdots \\
+\sum_{i} g_i (x) \frac{\pp g_i (x)}{\pp x_n} \\
+\end{bmatrix} \\
+&= \grad g(x)^T g(x).
+\end{align*}
+}
+\begin{align}
+0 = \grad F^\alpha (x_\alpha) = \grad f(x_\alpha) + \alpha \grad g(x_\alpha)^T \grad g(x_\alpha) + \beta (x_\alpha - x_0).
+\labeq{proof_FJcfvf_eq_6}
+\end{align}
+Then
+\begin{align}
+0 = \gamma_\alpha \grad f(x_\alpha) + \grad g(x_\alpha)^T \lambda_\alpha + \gamma_\alpha \beta (x_\alpha - x_0),
+\labeq{proof_FJcfvf_eq_7}
+\end{align}
+for
+\begin{align}
+\gamma_\alpha  &= (1+\alpha^2|g(x_\alpha)|^2)^{1/2} \\
+\lambda_\alpha &= \gamma_\alpha \alpha g(x_\alpha)
+\end{align}
+
+Step 4: Now $\gamma_\alpha^2 + \lambda_\alpha^2 = 1$ and therefore $\{(\gamma_\alpha, \lambda_\alpha)\}_{\alpha >0}$ is bounded.
+Consequently, the Bolzano-Weierstrass Theorem asserts that there is a sequence $\alpha_j \to \infty$ such that $
+\gamma_{\alpha_j} \to \gamma_0 \in \R$, $\lambda_{\alpha_j} \to \lambda_0 \in \R^m$, and $(\gamma_0, \lambda_0) \neq (0, 0)$.
+Let $\alpha$ in \refeq{proof_FJcfvf_eq_7} behaves like $\alpha_j \to \infty$ and recall \refeq{proof_FJcfvf_eq_5} to derive \refeq{FJcfvf_mat}.
+We finish the proof.
+\end{proof}
+
+\begin{remark}
+The term $\beta$ played no role, but will be used in the later proof of \refthm{constrained_second_variation_formula}.
+
+The existence theory for Lagrange multipliers for inequality constraints of the form $h_j (x) \le 0$ for $j=1,\dots, p$ is more complicated and will be discussed later. 
+\end{remark}
+
+\subsection{Regular points}
+
+\begin{definition}[Regular point]
+\index{regular point}
+A point $x_0$ is regular if the vectors $\{\grad g_k(x_0) \} _{k=1,\dots,m}$ are linearly independent in $\R^n$.
+\end{definition}
+
+\begin{theorem}[Constrained first variation formula]
+\labthm{constrained_first_variation_formula}
+Suppose that $x_0$ solves the constrained optimization problem defined in \refdef{constrained_optimization} and furthermore that $x_0$ is regular. Then there exist real numbers $\lambda_0^1,\dots,\lambda_0^m$ such that
+\begin{align}
+\grad f(x_0) + \sum_{k=1}^{n} \lambda_0^k \grad g_k(x_0) = 0.
+\end{align}
+By defining $\lambda_0 = [ \lambda_0^1 \dots \lambda_0^m ]^T$, equivalently we have
+\begin{align}
+\grad f(x_0) + \lambda_0^T \grad g(x_0) = 0. \labeq{cfvf_mat}
+\end{align}
+\end{theorem}
+\begin{proof}
+From \refthm{FJ_constrained_first_variation_formula}, we know that 
+\begin{align}
+\gamma_0 \grad f(x_0) + \lambda_0^T \grad g(x_0) = 0 \labeq{}
+\end{align}
+for constants $\gamma_0, \lambda_0^1, \dots, \lambda_0^m$ are not all zero.
+
+We claim that if $x_0$ is regular, then $\gamma_0 \neq 0$.
+To see this, suppose instead that $\gamma_0 = 0$, then
+\begin{align}
+\lambda_0^T \grad g(x_0) = 0
+\end{align}
+and $\lambda_0 \neq 0$. But this is impossible as $\grad g(x_0)$ are independent. 
+Thus we divide both sides of \refeq{FJcfvf_mat} by $\gamma_0$ to obtain an expression of the form in \refeq{cfvf_mat}.
+\end{proof}
+
+\subsection{Constrained second variation}
+
+We discuss next how to compute second variations when we have regular
+equality constraints.
+
+\begin{lemma}
+If $x_0$ is regular, then the $m \times m$ matrix $\grad g(x_0) \grad g(x_0)^T$ is nonsingular.
+\end{lemma}
+
+\begin{proof}
+Suppose that $y \in \R^m$ and $\grad g(x_0) \grad g(x_0)^T y = 0$.
+If a nonzero $y$ satisfies this, then $\grad g(x_0) \grad g(x_0)^T$ is singular.
+However, if not (only $y=0$ satisfies this), then matrix $\grad g(x_0) \grad g(x_0)^T$ is nonsingular.
+
+We multiply both sides by $y^T$.
+\begin{align}
+0 = y^T \grad g(x_0) \grad g(x_0)^T y = |\grad g(x_0)^T y|^2
+\end{align}
+Therefore,
+\begin{align}
+0 = \grad g(x_0)^T y = 
+\begin{bmatrix}
+\frac{\pp g_1}{\pp x_1} & \cdots & \frac{\pp g_m}{\pp x_1} \\
+\vdots & \ddots & \vdots \\
+\frac{\pp g_1}{\pp x_n} & \cdots & \frac{\pp g_m}{\pp x_n} \\
+\end{bmatrix}
+= \sum _{k=1}^{m} y_k \grad g_k(x_0)
+\end{align}
+Since $x_0$ is regular, the vectors $\{ \grad g_k(x_0) \} _{k=1,\dots,m}$ are linearly independent in $\R^n$ so that we must have $y=0$.
+The $m \times m$ matrix $\grad g(x_0) \grad g(x_0)^T$ is nonsingular.
+\end{proof}
+
+\begin{theorem}[Constrained second variation formula]
+\labthm{constrained_second_variation_formula}
+Suppose that x0 solves the constrained optimization problem defined in \refdef{constrained_optimization} and that $x_0$ is regular.
+Let $\lambda_0^1,\dots,\lambda_0^m$ be corresponding Lagrange multipliers, satisfying the first variation formula, \refeq{cfvf_mat}.
+Then
+\begin{align}
+y^T \left(\grad ^2 f(x_0) + \sum_{k=1}^{m}\lambda_0^k \grad ^2 g_k(x_0) \right) y \ge 0 \labeq{csvf}
+\end{align}
+for all $y \in \R^n$ such that $\grad g(x_0) y = 0$.
+\end{theorem}
+
+\begin{proof}
+Step 1: We return to the proof of \refthm{FJ_constrained_first_variation_formula} and extract more detailed information. 
+Since $x_0$ is regular, we know from \refthm{constrained_first_variation_formula} that
+\begin{align}
+\gamma_\alpha = (1+\alpha^2|g(x_\alpha)|^2)^{1/2} \to \gamma_0 \neq 0.
+\labeq{proof_csvf_eq_1}
+\end{align}
+Hence $\{ \alpha |g(x_\alpha)| \}_{\alpha > 0}$ is bounded. 
+We can assume that $\alpha_j g(x_{\alpha_j}) \to \lambda_0$.
+
+Step 2: Since, $x_\alpha$ lies within the interior of ball $B$ for large $\alpha$, we have $z^T \grad ^2 F^\alpha (x_\alpha) z \ge 0$ for all $z \in \R^n$ where
+\begin{align}
+\grad ^2 F^\alpha (x) = \grad^2 f(x) + \alpha \grad g(x)^T \grad g(x) + \alpha \sum _{k=1} ^{m} g_k (x) \grad^2 g_k(x) + \beta I.
+\labeq{proof_csvf_eq_2}
+\end{align}
+Now, 
+\begin{align}
+z^T \left( \grad^2 f(x_\alpha) + \alpha \grad g(x_\alpha)^T \grad g(x_\alpha) + \alpha \sum _{k=1} ^{m} g_k (x_\alpha) \grad^2 g_k(x_\alpha) + \beta I \right) z \ge 0
+\labeq{proof_csvf_eq_3}
+\end{align}
+Remember from the Lemma that $\grad g(x_0) \grad g(x_0)^T$ is nonsingular; consequently $\grad g(x_\alpha) \grad g(x_\alpha)^T$ is invertible for a large $\alpha$.
+Given $y \in \R^m$ with $\grad g(x_0) y = 0$, we define
+\begin{align}
+z_\alpha = y - \grad g(x_\alpha)^T \left( \grad g(x_\alpha) \grad g(x_\alpha)^T \right) ^{-1} \grad g(x_\alpha) y.
+\labeq{proof_csvf_eq_4}
+\end{align}
+Then $\grad g(x_\alpha) y = 0$.
+Observe that $z_\alpha \to y$ as $\alpha \to \infty$.
+This follows since $x_\alpha \to x_0$ and $\grad g(x_0) y = 0$.
+
+Step 3: Take $z = z_\alpha$ in \refeq{proof_csvf_eq_3}, then
+\begin{align}
+(z_\alpha)^T \left( \grad^2 f(x_\alpha) + \alpha \grad g(x_\alpha)^T \grad g(x_\alpha) + \alpha \sum _{k=1} ^{m} g_k (x_\alpha) \grad^2 g_k(x_\alpha) + \beta I \right) (z_\alpha) \ge 0,
+\labeq{proof_csvf_eq_5}
+\end{align}
+where $(z_\alpha)^T \alpha \grad g(x_\alpha)^T \grad g(x_\alpha) (z_\alpha) = 0$.
+Let $\alpha \to \infty$ and recall that $\alpha_j g(x_{\alpha_j}) \to \lambda_0$,
+\begin{align}
+y^T \left( \grad ^2 F^\alpha (x_\alpha) = \grad^2 f(x_\alpha) + \sum _{k=1} ^{m} \lambda_0^k g_k (x_\alpha) \grad^2 g_k(x_\alpha) + \beta I \right) y \ge 0,
+\end{align}
+for $y \in \R^m$ that $\grad g(x_0) y = 0$.
+To conclude send $\beta \to 0$.
+\end{proof}
+
+\section{Applications}
+
+\subsection{Least squares}
+
+Let $A$ denote an $m \times n$ matrix and assume $b \in \R^m$ is given.
+If the linear system $Ax = b$ has no solution, we can nevertheless build an approximate solutions by finding $x_0 \in \R^n$ that solves the minimization problem
+\begin{align}
+\min _{x \in \R^n} |Ax-b|^2 \labeq{least_squares}
+\end{align}
+
+\begin{theorem}
+If $A^T A$ is invertible, then the solution of \refeq{least_squares} is
+\begin{align}
+x_0 = (A^T A)^{-1} A^T b
+\end{align}
+\end{theorem}
+
+\begin{proof}
+Step 1:
+Let $f(x) = |Ax-b|^2 = |Ax|^2 - 2 (Ax)^T b + |b|^2$.
+We have
+\begin{align}
+\grad f(x) = 2 A^T A x - 2 A^T b.
+\end{align}
+So that $\grad f(x_0) = 0$ implies $x_0 = (A^T A)^{-1} A^T b$.
+
+Step 2:
+For uniqueness, we must show that $f(x_0) \le f(x_0 + y)$ for all $y \ne 0$.
+\begin{align}
+f(x_0+y)-f(x_0) &= |A(x_0+y) -b|^2 - |Ax_0-b|^2 \\
+&= 2 (Ax_0-b)^TAy+|Ay|^2 \nonumber \\
+&= |Ay|^2 \ge 0. \nonumber
+\end{align}
+\end{proof}
+
+\subsection{Roots of polynomials}
+
+A novel application of Lagrange multipliers by \sidecite{theo_de_jong_lagrange_2009} shows that the existence of a root for a complex polynomial of degree $n \ge 1$:
+\begin{align}
+f(z) = z^n + a_{n-1} z^{n-1} + \cdots + a_1 z + a_0
+\end{align}
+The coefficients $a_0, \dots, a_{n-1}$ here are complex numbers.
+
+If we substitute $z = x + iy$, then we can write $f$ in terms of real and imaginary parts:
+\begin{align}
+f(z) = u(x,y) + i v(x,y),
+\end{align}
+where $u, v : \R^2 \to \R$ are polynomials.
+
+\begin{lemma}
+The functions $u, v$ solve the Cauchy-Riemann equations
+\begin{align}
+\frac{\pp u}{\pp x} &= \frac{\pp v}{\pp y} \\
+\frac{\pp u}{\pp y} &= -\frac{\pp v}{\pp x}
+\end{align}
+\end{lemma}
+
+\begin{proof}
+We first apply induction to $f_n(z) = z^n$.
+When $n=1$, $f_1(z) = z = x + iy = u_1(x,y) + iv_1(x,y)$
+It is trivial that $u_1 = x, v_1 = y$ solve the Cauchy-Riemann equations.
+
+Then suppose that for $n=k-1$, $u_{k-1}, v_{k-1}$ solve the Cauchy-Riemann equations.
+
+For $n = k$, $f_k(z) = z f_{k-1}(z) = (x+iy)(u_{k-1}+iv_{k-1})$, so that $u_k = xu_{k-1} - yv_{k-1}, v_k = yu_{k-1} + xv_{k-1}$.
+And it is easy to find 
+\begin{align}
+\frac{\pp u_k}{\pp x} &= u_{k-1} + x \frac{\pp u_{k-1}}{\pp x} - y \frac{\pp v_{k-1}}{\pp x} \\
+\frac{\pp v_k}{\pp y} &= x \frac{\pp v_{k-1}}{\pp y} + u_{k-1} + y \frac{\pp u_{k-1}}{\pp y} \\
+\frac{\pp u_k}{\pp y} &= x \frac{\pp u_{k-1}}{\pp y} - v_{k-1} - y \frac{\pp v_{k-1}}{\pp y} \\
+\frac{\pp v_k}{\pp x} &= v_{k-1} + x \frac{\pp v_{k-1}}{\pp x} + y \frac{\pp u_{k-1}}{\pp x}.
+\end{align}
+Since $u_{k-1}, v_{k-1}$ solve the Cauchy-Riemann equations, $u_{k}, v_{k}$ also solve the Cauchy-Riemann equations.
+
+Moreover, constant terms go into $u,v$ do not matter.
+The proof for a general general polynomials follows by linearity.
+When $f(z)=a_0 + \sum_{k \ge 1} a_k f_k(z)$, we have $u= a_0 + \sum_{k \ge 1} a_k u_k$ and $v = \sum_{k \ge 1} a_k v_k$.
+The functions $u, v$ solve the Cauchy-Riemann equations.
+\end{proof}
+
+\begin{theorem}[Fundamental Theorem of Algebra]
+There exists a point $z_0 \in \C$ which $f(z_0) = 0$.
+\end{theorem}
+
+\begin{proof}
+Step 1: 
+We introduce the level sets $L_c = \{ (x,y) \in \R^2 : u(x,y)=c \}$ and $M_c = \{ (x,y) \in \R^2 : v(x,y)=c \}$, where $c \in \R$.
+Since $u(x, 0) = x^n+ \text{lower order terms}$, the function $u(x, 0)$ takes on infinitely many values.
+It follows that the sets $L_c$ are nonempty for infinitely many values of the parameter $c$.
+We observe next that except for finitely many values of $c$, we have $\grad u \neq 0$ on $L_c$ and $\grad v \neq 0$ on $M_c$.
+To see this, note that $f'$ is a polynomial, and consequently has at most finitely many zeros.
+But $f' = \frac{\pp u}{\pp x} + i\frac{\pp v}{\pp x} = \frac{\pp u}{\pp x} - i\frac{\pp u}{\pp y}$\sidenote{The derivatives for complex variable functions.}, according to Cauchy-Riemann equations, and therefore $\grad u \neq 0$ except at finitely many
+points.
+
+Step 2:
+Select a value of the parameter $c$ so that $L_c \neq \emptyset$ and $\grad u \neq 0$ on $L_c$.
+We introduce the constrained optimization problem
+\begin{align}
+\min \ & v^2 \\
+\st  & u = c.
+\end{align}
+Since $u^2 + v^2 = |f|^2 \to \infty$ as $|z| \to \infty$, we can use the Extreme Value Theorem to show that there exists a point $(x_c, y_c) \in L_c$ solving the constrained optimization problem.
+We claim that $v(x_c,y_c) = 0$.
+To see this, note that since $\grad u \neq 0$ on $L_c$, $(x_c, y_c)$ is a regular point. 
+Hence \refthm{constrained_first_variation_formula} asserts that there exists a Lagrange multiplier $\lambda$ such that $2v(x_c,y_c) \grad v(x_c,y_c) + \lambda \grad u(x_c,y_c) = 0$.
+But the Cauchy-Riemann equations imply $\grad u \cdot \grad v = 0$ and $|\grad u| = |\grad v|$.
+Since $\grad u(x_c, y_c) \neq 0$, it follows that $\lambda = 0$ and $\grad v(x_c, y_c) = 0$.
+
+Step 3:
+In view of $v(x_c,y_c)=0$, we see that $M_0 \neq \emptyset$.
+Select a sequence $c_k \to 0$, such that $M_{c_k} \neq \emptyset$ and $\grad v \neq 0$ on $M_{c_k}$.
+Then the argument above (with the roles of $u$ and $v$ reversed) shows that
+there exist points $(x_k, y_k) \in M_{c_k}$ for which $u(x_k, y_k) = 0$.
+The sequence $\{ (x_k, y_k) \}_{k=1}^{\infty}$ is bounded, and so, passing if necessary to a subsequence, we may assume $(x_k, y_k) \to (x_0, y_0) \in M_0$.
+Then $u(x_0, y_0) = v(x_0, y_0) = 0$, and therefore $f(z_0) = 0$ for $z_0 = x_0+iy_0$.
+\end{proof}

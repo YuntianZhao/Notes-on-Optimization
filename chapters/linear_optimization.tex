@@ -1,0 +1,866 @@
+\setchapterstyle{kao}
+\setchapterpreamble[u]{\margintoc}
+\chapter{Linear Optimization}
+\labch{linear_optimization}
+
+Linear optimization theory, most commonly known as linear programming, concerns the minimization of linear functions, subject to affine equality and inequality constraints.
+
+\section{Theory}
+
+\subsection{Basic concepts}
+
+Before start, we introduce some notations.
+If $x = [x_1 \dots x_n]^T \in \R^n$, we write $x \ge 0$ to mean that $x_i \ge 0$ for all $i = 1, \dots, n$.
+Similarly, $x > 0$ means that $x_i > 0$ for all $i = 1,\dots, n$.
+
+We have $x \ge y$ if $x_i \ge y_i$ for all $i = 1, \dots, n$ and $x > y$ if $x_i > y_i$ for all $i = 1, \dots, n$.
+
+\begin{definition}[Canonical primal linear programming problem]
+\labdef{canonical_primal_LP}
+Let $c \in \R^n$, $b \in \R^m$ and assume $A$ is an $m \times n$ matrix.
+The canonical primal linear programming problem is to find $x_0 \in \R^n$ to
+\begin{align}
+\min \ & c^T x \tag{$P$} \labeq{LP_P} \\
+\st & Ax = b \nonumber \\
+& x \ge 0 \nonumber
+\end{align}
+\end{definition}
+
+\begin{definition}
+We say $x \in \R^n$ is feasible if $Ax = b$, $x \ge 0$, that is, if $x$ satisfies the constraints in \arefeq{LP_P}.
+We will often call a feasible $x$ a feasible solution.
+\end{definition}
+
+\begin{definition}[Canonical dual linear programming problem]
+\labdef{canonical_dual_LP}
+A canonical dual problem is to find $y_0 \in \R^m$ to
+\begin{align}
+\max \ & b^T y \tag{$D$} \labeq{LP_D} \\
+\st & A^T y \le c \nonumber
+\end{align}
+\end{definition}
+
+\begin{definition}
+We say $y \in \R^m$ is feasible for \arefeq{LP_D} if $A^T y\le c$.
+\end{definition}
+
+The most important fact of linear programming is that the primal and
+dual problems contain information about each other.
+
+\begin{theorem}[Duality and optimality]
+\labthm{d_o}
+If $x$ is feasible for \arefeq{LP_P} and $y$ is feasible for \arefeq{LP_D}, then 
+\begin{align}
+b^T y \le c^T x. \labeq{d_o}
+\end{align}
+
+If $x_0$ is feasible for \arefeq{LP_P} and $y_0$ is feasible for \arefeq{LP_D}, and if $b^T y_0 = c^T x_0$ then $x_0$ solves \arefeq{LP_P} and $y_0$ solves \arefeq{LP_D}.
+\end{theorem}
+
+\begin{proof}
+Let $x, y$ be feasible, $Ax=b, x\ge0$ and $A^T y\le c$.
+We have 
+\begin{align}
+b^T y = (Ax)^T y = x^T A^T y \le x^T c = c^T x. \labeq{proof_d_o}
+\end{align}
+Suppose $x_0$, $y_0$ are feasible and $b^T y_0 = c^T x_0$.
+By \arefeq{proof_d_o}, $b^T y0 \le c^T x$ for all feasible $x$ for \arefeq{LP_P}.
+So $c^T x0 \le c^T x$ for all feasible $x$, and thus $x_0$ is optimal for \arefeq{LP_P}.
+A similar argument works for $y_0$. 
+\end{proof}
+
+Then we introduce some other forms of linear programming problems.
+
+\begin{definition}[Standard linear programming problem]
+\labdef{standard_LP}
+The standard linear programming problem is to find $x_0 \in \R^n$ to
+\begin{align}
+\min \ & c^T x \tag{$P^*$} \labeq{LP_Ps} \\
+\st & Ax \ge b \nonumber \\
+    & x \ge 0 \nonumber
+\end{align}
+\end{definition}
+
+\begin{definition}[Dual standard linear programming problem]
+\labdef{dual_standard_LP}
+The dual standard linear programming problem is to find $y_0 \in \R^m$ to
+\begin{align}
+\max \ & b^T y \tag{$D^*$} \labeq{LP_Ds} \\
+\st & A^T y \le c \nonumber \\
+    & y \ge 0 \nonumber
+\end{align}
+\end{definition}
+
+\begin{remark}
+Note carefully that we now have an inequality $Ax \ge b$ and an additional sign constraint $y \ge 0$.
+\end{remark}
+
+\begin{remark}
+\labremark{d_o_standard}
+We could check that the duality and optimality theorem (\refthm{d_o}) applies to the standard forms \arefeq{LP_Ps} and \arefeq{LP_Ds}.
+\end{remark}
+
+\begin{definition}[General linear programming problem]
+\labdef{general_LP}
+The general linear programming problem is to find $x_0 \in \R^n$ to
+\begin{align}
+\min \ & c^T x & \tag{$P^o$} \labeq{LP_Po} \\
+\st    & \sum_{j=1}^{n} a_{ij} x_j \ge b_i, & i \in I_1 \nonumber \\
+       & \sum_{j=1}^{n} a_{ij} x_j = b_i, & i \in I_2 \nonumber \\
+       & x_j \ge 0, & j \in J_1 \nonumber
+\end{align}
+where $I_1 \cup I_2 = I$, $I_1 \cap I_2 = \emptyset$, $J_1 \subseteq J$, $I = \{ 1, \dots, m \}$, and $J=\{ 1, \dots, n \}$.
+Here $I_1$ and $J_1$ are the indices of the inequality constraints.
+\end{definition}
+
+\begin{definition}[Dual general linear programming problem]
+\labdef{dual_general_LP}
+The dual general linear programming problem is to find $y_0 \in \R^m$ to
+\begin{align}
+\max \ & b^T y & \tag{$D^o$} \labeq{LP_Do} \\
+\st & \sum_{i=1}^{m} y_i a_{ij} \le c_j, & j \in J_1 \nonumber \\
+    & \sum_{i=1}^{m} y_i a_{ij} = c_j, & j \in J_2 \nonumber \\
+    & y_i \ge 0, & i \in I_1 \nonumber
+\end{align}
+where $J_1 \cup J_2 = J$, $J_1 \cap J_2 = \emptyset$, $I_1 \subseteq I$, $I = \{ 1, \dots, m \}$, and $J=\{ 1, \dots, n \}$.
+And $I_1$ and $J_1$ are the indices of the inequality constraints.
+\end{definition}
+
+\begin{remark}
+We write $[A, b, c, I_1, J_1]$ to display the relevant information determining in a general linear programming problem \arefeq{LP_Po} defined in \refdef{general_LP}.
+
+The canonical problem \arefeq{LP_P} and its dual \arefeq{LP_D} 
+correspond to $J_1 = J, J_2 = \emptyset, I_1 = \emptyset, I_2 = I$.
+
+The standard problem \arefeq{LP_Ps} and its dual \arefeq{LP_Ds} correspond to $J_1 = J, J_2 = \emptyset, I_1 = I, I_2 = \emptyset$.
+\end{remark}
+
+\begin{remark}
+\labremark{d_o_general}
+We could check that the duality and optimality theorem (\refthm{d_o}) applies to the general forms \arefeq{LP_Po} and \arefeq{LP_Do}.
+\end{remark}
+
+\begin{theorem}[Linear programming duality]
+The dual of \arefeq{LP_Do} is \arefeq{LP_Po}.
+\end{theorem}
+
+\begin{proof}
+The problem \arefeq{LP_Do} is equivalent to 
+\begin{align}
+\min \ & (-b)^T y & \\
+\st    & \sum_{i=1}^{m} (-a_{ij}) y_i \ge c_j, & j \in J_1 \\
+       & \sum_{i=1}^{m} (-a_{ij}) y_i = c_j, & j \in J_2 \\
+       & y_i \ge 0 & i \in I_1
+\end{align}
+This is $[-A^T, -c, -b, J_1, I_1]$. 
+So duality converts
+\begin{align}
+\underbrace{[A, b, c, I_1, J_1]}_{P^o} \to \underbrace{[-A^T, -c, -b, J_1, I_1]}_{D^o}.
+\end{align}
+Hence the dual of \arefeq{LP_Do} is
+\begin{align}
+[-(-A^T)^T, -(-b), -(-c), I_1, J_1] = [A, b, c, I_1, J_1].
+\end{align}
+\end{proof}
+
+\begin{remark}
+By adding new slack variables, we can in fact convert a general linear programming problem \arefeq{LP_Po} into the canonical form \arefeq{LP_P}.
+
+As a consequence of these observations, when we study the theory of linear programming, it is enough to consider the canonical problem.
+\end{remark}
+
+\subsection{Equilibrium equations}
+
+\begin{theorem}[Equilibrium equations]
+Suppose $x$ is feasible for \arefeq{LP_P} and $y$ is feasible for \arefeq{LP_D}.
+Then $x$ and $y$ are optimal iff they satisfy the equilibrium equations
+\begin{align}
+\sum_{i=1}^{m} y_i a_{ij} = c_j \text{ if } x_j > 0, j = 1,\dots,n. \tag{E} \labeq{LP_E}
+\end{align}
+And equivalently,
+\begin{align}
+\sum_{i=1}^{m} y_i a_{ij} < c_j \text{ if } x_j = 0, j = 1,\dots,n. \tag{E'}
+\end{align}
+\end{theorem}
+
+\begin{proof}
+As before, we compute $b^T y = (Ax)^T y = x^T A^T y \le x^T c$.
+Our question is when do we have equality in the last inequality?
+Note that 
+\begin{align}
+x^T (A^T y - c) = \sum_{j=1}^{n} x_j \left( (A^Ty)_j - c_j \right) \begin{cases}
+= 0, \text{ if \arefeq{LP_E} holds} \\
+< 0, \text{ if \arefeq{LP_E} fails}
+\end{cases}
+\end{align}
+where $(A^T y)_j = \sum_{i=1}^{m} y_i a_{ij}$. 
+Thus we have $b^T y = c^T x$ if \arefeq{LP_E} holds.
+By \refthm{d_o}, \arefeq{LP_E} implies the optimality for both $x$ and $y$.
+\end{proof}
+
+\subsection{Basic solutions}
+
+We introduce next the concept of basic solutions to linear programming problems.
+These are solutions with the largest numbers of zero entries, which are consequently the easiest to study.
+
+A $m \times n$ matrix $A$ can be written as $[a^1 a^2 \cdots a^n]$, where $a^j$ is the $j$-th column vector of $A$, and so $a^j \in \R^m$ for $j = 1, \dots, n$. 
+
+\begin{lemma}
+If $Ax = b$, then $b$ is a linear combination of the columns of $A$.
+\end{lemma}
+
+\begin{proof}
+We can write $Ax=b$ as $\sum_{j=1}^{n} x_j a^j = b$, and this shows $b$ to be a linear combination of the column vectors of $A$.
+\end{proof}
+
+\begin{definition}
+\labdef{LP_basic_solution}
+\index{basic solutions}
+We say that $x \in \R^n$ is a basic solution of $Ax = b$ if the columns $\{ a^j : x_j \neq 0, j=1,\dots,n \}$ are linearly independent in $\R^m$.
+Also, we say $x = 0$ is basic.
+\end{definition}
+
+
+
+\begin{theorem}
+\labthm{LP_finite_basic_solution}
+For each $b \in \R^m$ the linear system of equations $Ax = b$ has at most finitely many basic solutions.
+\end{theorem}
+
+\begin{proof}
+Look at columns $\{ a^1,\dots, a^n \}$ of $A$.
+There are only finitely many subsets $\{ a^{j_1},\dots, a^{j_l} \} \subseteq \{ a^1,\dots, a^n \}$ which are independent in $\R^m$.
+We claim there is at most one solution of $Ax=b$ having the form $x = [0 x_{j_1} \dots x_{j_l} 0]^T$.
+To see this, let $\hat{x} = [0 \hat{x}_{j_1} \dots \hat{x}_{j_l} 0]^T$ also solve $A\hat{x} = b$.
+Then $A(x-\hat{x}) = b -b = 0$ and therefore $\sum_{k=1}^{l} (x_{j_k} - \hat{x}_{j_k})a^{j_k} = 0$.
+Since the columns $\{ a^{j_1},\dots, a^{j_l} \}$ are linearly independent, it follows that $x_{j_k} = \hat{x}_{j_k}$.
+Hence there is at most one basic solution of $Ax = b$ corresponding to each
+independent collection of columns.
+\end{proof}
+
+\begin{theorem}[Basic solutions]
+\labthm{LP_basic_solution}
+If there exists a feasible solution of \arefeq{LP_P}, then there exists a basic feasible solution.
+
+If there exists an optimal solution of \arefeq{LP_P}, then there exists a basic optimal solution. 
+\end{theorem}
+
+\begin{proof}
+Step 1:
+Select a feasible solution $x$ with fewest number of nonzero components.
+And then let us show it is a basic feasible solution.
+
+If $x=0$, we are done.
+If not, then suppose that $x$ has nonzero elements $x_{j_1}, x_{j_2}, \dots, x_{j_l} > 0$ and 
+\begin{align}
+Ax = \sum _{k=1}^{l} x_{j_k}a^{j_k} = b. \labeq{proof_basic_sol_1}
+\end{align}
+Then suppose that $x$ is not basic. 
+By \refdef{LP_basic_solution}, $\{ a^{j_1},\dots, a^{j_l} \}$ are not linearly independent.
+There exists $\theta_{j_1}, \theta_{j_2}, \dots, \theta_{j_l}$ not all equal to zero, such that
+\begin{align}
+\sum_{k=1}^{l} \theta_{j_k} a^{j_k} = 0. \labeq{proof_basic_sol_2}
+\end{align}
+This means that $A\theta = 0$.
+Then \refeq{proof_basic_sol_1} and \refeq{proof_basic_sol_2} simply imply for any $\lambda$ that
+\begin{align}
+\sum _{k=1}^{l} (x_{j_k} - \lambda \theta_{j_k}) a^{j_k} = b.
+\end{align}
+We may assume $\theta_{j_p} > 0$ for some index $j_p$ (if not, multiply $\theta$ by $-1$).
+Increase $\lambda$ from $0$ to the first $\lambda^*>0$ for which at least one of the values $x_{j_1} - \lambda^* \theta_{j_1}, \dots, x_{j_l} - \lambda^* \theta_{j_l}$ equals zero while others remain to be greater than zero.
+Since $\theta_{j_p}>0$, this must happen at finite value of $\lambda^*$.
+Then let $x^* = x - \lambda^* \theta \ge 0$ and $A x^* = 0$.
+But $x^*$ then has at least one fewer nonzero entry than $x$.
+This is a contradiction, and therefore $x$ is indeed a basic feasible solution.
+
+Step 2:
+Now let $x_0$ be an optimal solution with the fewest number of nonzero components. 
+We will show that $x_0$ is a basic optimal solution.
+
+Suppose $x_0$ is not.
+Then as above, suppose $x_0$ has nonzero elements $x_{j_1}, x_{j_2}, \dots, x_{j_l} > 0$ and $\sum _{k=1}^{l} x_{j_k}a^{j_k} = b$ and $\sum_{k=1}^{l} \theta_{j_k} a^{j_k} = 0$ for appropriate $\theta_{j_1}, \dots, \theta_{j_l}$ not all zero.
+Select $\lambda^*$ as before and write $x_0^* = x_0 - \lambda^* \theta$.
+Then $A x_0^* = b$, $x_0^* \ge 0$, and $x_0^*$ has fewer nonzero components than $x_0$ which leads to contradiction of that $x_0$ has the fewest number of nonzero components.
+
+Step 3:
+We now claim
+\begin{align}
+c^T x_0^* = c^T x_0 = \min \{ c^T x : Ax=b, x\ge 0 \}. \labeq{proof_basic_sol_3}
+\end{align}
+To prove this, observe first that 
+\begin{align}
+c^T \theta = 0; \labeq{proof_basic_sol_4}
+\end{align}
+for otherwise, we could select a small value of $\lambda$ so that $c^T (x_0 - \lambda \theta) < c^T x_0$ and $x_0$ is not optimal consequently.
+Thus \refeq{proof_basic_sol_4} must hold and therefore \refeq{proof_basic_sol_3} holds. 
+Thus $x_0^*$ is optimal for \arefeq{LP_P}, but has fewer nonzero components than $x_0$.
+And this is a contradiction: $x_0$ is a basic optimal solution.
+\end{proof}
+
+\begin{remark}
+Our discussion of basic solutions leads to the very interesting realization that although linear programming problems are finite dimensional, with infinitely many feasible solutions, they are in effect finite optimization problems, with only finitely many basic solutions to consider and only finitely many optimal basic solutions.
+
+The simplex algorithm, discussed next, builds upon this observation.
+\end{remark}
+
+\section{Simplex algorithm}
+\index{simplex algorithm}
+The simplex algorithm comprises two procedures:
+
+Phase I: Find a basic feasible solution of $Ax = b$, $x \ge 0$ (or show that none exists).
+
+Phase II: Given a basic feasible solution, find a basic optimal solution (or show that none exists).
+
+\subsection{Nondegeneracy}
+\index{nondegeneracy}
+\begin{assumption}[Nondegeneracy]
+\labassum{nondegeneracy}
+The nondegeneracy assumptions are that
+\begin{enumerate}
+    \item $n > m$;
+    \item the rows of $A$ are linearly independent (and thus $A$ has $m$ columns which are independent);
+    \item $b$ cannot be written as a linear combination of fewer than $m$ columns of $A$.
+\end{enumerate}
+\end{assumption}
+
+Assumption 1 implies that there are more unknowns ($x_1, \dots , x_n$) than the $m$ linear equality constraints in the linear system $Ax = b$.
+
+Assumption 2 means that $\mathrm{rank}(A) = \dim (\text{column space}) = \dim (\text{row space}) = m$.
+
+Assumption 3 says that if $Ax = b$, then $x$ has at least $m$ nonzero entries.
+
+\begin{remark}
+Under the nondegeneracy assumptions, any basic, feasible solution of $Ax = b, x \ge 0$ has precisely $m$ nonzero entries.
+The next assertion shows that the converse is true as well
+\end{remark}
+
+\begin{lemma}[On nondegeneracy]
+\lablemma{on_nondegeneracy}
+Assume the nondegeneracy assumptions 1-3 hold.
+If $Ax = b, x \ge 0$ and $x$ has precisely $m$ non-zero entries, then $x$ is a basic feasible solution.
+\end{lemma}
+
+\begin{proof}
+Let $x = [0 x_{j_1} 0 \dots x_{j_m} \dots 0]^T$, where $x_{j_1}, \dots x_{j_m} > 0$, and write $B = \{ j_1, \dots, j_m \}$.
+To show that $x$ is a basic feasible solution, We must prove that the columns $\{ a^{j_1}, \dots, a^{j_m} \}$ are independent. 
+
+We know that $\sum _{j \in B} x_j a^j = b$.
+If the columns $\{ a^{j_1}, \dots, a^{j_m} \}$ are dependent, we could write some column as a linear combination of the others.
+This is, for some index $j_k$ we have $a^{j_k} = \sum _ {j \in B, j \neq j_k} y_j a^j$.
+Then 
+\begin{align}
+b = x_{j_k} a^{j_k} + \sum _ {j \in B, j \neq j_k} x_j a^j 
+= x_{j_k} \sum _ {j \in B, j \neq j_k} y_j a^j + \sum _ {j \in B, j \neq j_k} x_j a^j 
+= \sum _ {j \in B, j \neq j_k} (x_{j_k} y_{j} + x_j) a^j.
+\end{align}
+Thus $b$ is a linear combination of few than $m$ columns of $A$, a contradiction to the nondegeneracy requirement 3.
+\end{proof}
+
+\subsection{Phase II}
+
+We discuss Phase II before Phase I.
+The goal of Phase II is, given a basic feasible solution $x$, to find a basic optimal solution $x_0$, or show none exists.
+For this, we assume the nondegeneracy condition 1, 2, 3.
+
+So we are given $x = [0 \ x_{j_1} \ 0 \dots x_{j_m} \dots 0]^T$ where $x_{j_1}, \dots x_{j_m} > 0$ are the $m$ nonzero entries of $x$.
+We also have $Ax = b$.
+
+\subsubsection{Step 1: Use the dual problem to check for optimality}
+
+We have a basic feasible solution $x$, and need to check if it is optimal or not.
+
+\begin{definition}
+Suppose we have a basic feasible solution $x$.
+Let $B = \{ j : x_j > 0 \} = \{ j_1, \dots, j_m \}$. 
+We call $\{ a^j: j \in B \}$ the basis corresponding to $x$.
+
+The $m \times m$ matrix $M = [a^{j_1} \ a^{j_2} \cdots a^{j_m}]_{m \times m}$, is called the corresponding basis matrix.
+
+If $c = [c_1 \dots c_n]^T$, define $\hat{c} = [c_{j_1} \dots c_{j_m}]^T \in \R^m$.
+\end{definition}
+
+\begin{remark}
+The matrix $M$ is invertible since its columns are independent.
+Thus there exist a unique $y \in \R^m$ solving $M^T y = \hat{c}$ and $y = (M^{-1})^T \hat{c}$.
+
+Recall next that $y$ is feasible for \arefeq{LP_D} if $A^T y \le c$.
+This may or may not hold.
+But if it holds, we are done.
+\end{remark}
+
+\begin{lemma}
+If $A^T y \le c$ holds, then $x$ is optimal for \arefeq{LP_P}.
+\end{lemma}
+
+\begin{proof}
+The equilibrium equations \arefeq{LP_E} say 
+\begin{align}
+(a^j)^T y = \sum _{i=1}^{m} y_i a_{ij} = c_j \text{ if } x_j > 0 (\text{or} j \in B).
+\end{align}
+Now $M = [a^{j_1} \dots a^{j_m}]$, and so
+\begin{align}
+M^T = \begin{bmatrix}
+(a^{j_1})^T \\
+\vdots \\
+(a^{j_m})^T \\
+\end{bmatrix}
+\end{align}
+But since there exists a $y$ such that $M^T y = \hat{c}$, which means that $(a^j)^T y = c_j$ for $j \in B$.
+These are precisely the equilibrium question \arefeq{LP_E}. 
+So if $y$ is feasible for \arefeq{LP_D}, it follows that $x$ is optimal for \arefeq{LP_P} and $y$ is optimal for \arefeq{LP_D}.
+\end{proof}
+
+Therefore we have two possibilities:
+\begin{enumerate}
+    \item[A1:] $y = (M^{-1})^T \hat{c}$ satisfies $A^T y \le c$.
+    Then stop: $x$ is optimal for \refeq{LP_P} and $y$ is optimal for \arefeq{LP_D}.
+    \item[A2:] $y = (M^{-1})^T \hat{c}$ does not satisfy $A^T y \le c$.
+    Go to step 2.
+\end{enumerate}
+
+\subsubsection{Step 2: Use a wrong way inequality to improve $x$}
+
+When $A^T y \le c$ fails, there exists some index $s \in (\{ 1, \dots, n \} - B)$ such that 
+\begin{align}
+\underbrace{(a^s)^T y > c_s.}_{\text{wrong way inequality}} \labeq{LP_wrong_way}
+\end{align}
+The key idea of the simplex algorithm is use this fact to change the basis $\{a^j : j \in B \}$, thereby constructing a new basic feasible solution $x^*$ with a lower cost $c^T x^*$.
+To do this, we first find $t = [t_{j_1} \dots t_{j_m}] \in \R^m$ so that $Mt = a^s$.
+Since $M$ is invertible, we have a unique solution $t$.
+Then $a^s = \sum _{j \in B} t_j a^j$, and consequently for all $\lambda$ we have $\lambda a^s + \sum _{j \in B} (x_j - \lambda t_j) a^j = b$.
+We then define
+\begin{align}
+\hat{x} = \begin{bmatrix}
+0 \\
+x_{j_1} - \lambda t_{j_1} \\
+\vdots \\
+x_{j_2} - \lambda t_{j_2} \\
+\vdots \\
+\lambda \\
+\vdots \\
+x_{j_m} - \lambda t_{j_m} \\
+0 \\
+\end{bmatrix}
+\in \R^n.
+\end{align}
+
+Here $\lambda$ is in the $s$-th slot.
+And for a small $\lambda > 0$, we have $A\hat{x} = b$.
+Thus $\hat{x}$ is feasible for \arefeq{LP_P} small $\lambda > 0$.
+
+However, we must note that $\hat{x}$ has $m+1$ nonzero entries, and consequently is not basic.
+
+How does replacing $x$ by $\hat{x}$ affect the cost?
+We would be pleased if $c^T \hat{x} < c^T x$ after replacing $x$ by $\hat{x}$.
+\begin{align}
+c^T \hat{x} - c^T x 
+&= \lambda c_s + \sum _{j \in B} (x_j - \lambda t_j) c_j - \sum _{j \in B} x_j c_j \\
+&= \lambda c_s - \lambda \underbrace{\sum _{j \in B} t_j c_j}_{z_s} \\
+&= \lambda (c_s - z_s).
+\end{align}
+And $z_s = \sum _{j \in B} t_j c_j = \hat{c}^T t = \hat{c}^T (M^-1 a^s) = y^T a^s$.
+Therefore \arefeq{LP_wrong_way}  is equivalent to $z_s > c_s$.
+It follows that $c^T \hat{x} < c^T x$.
+Consequently, we lower the cost by shifting to $\hat{x}$ from $x$.
+
+\subsubsection{Step 3: Change the basis, lower the cost}
+
+There are two possibilities as to how much we can lower the cost by increasing $\lambda$:
+
+\begin{enumerate}
+    \item[B1:] $t_j \le 0$ for all $j \in B$.
+    Then $\hat{x}_j = x_j - \lambda t_j \ge x_j > 0$ for $j \in B$ and so $\hat{x}$ is feasible for all $\lambda > 0$.
+    Thus  says
+    \begin{align}
+        c^T \hat{x} = c^T x + \lambda \underbrace{(c_s - z_s)}_{< 0} \to - \infty
+    \end{align} as $\lambda \to \infty$.
+    So we have learned that $\inf \{c^T x : Ax = b, x \ge 0 \} = -\infty$ and therefore stop and concluded that \arefeq{LP_P} has no solution.
+    \item[B2:] $t_j > 0$ for at least one index $j \in B$.
+    We increase $\lambda$, starting at $0$ and stopping when $\lambda = \lambda^* > 0$ and $\hat{x}_{j_k} = x_{j_k} - \lambda^* t_{j_k} = 0$ for some index $j_k \in B$. 
+    Define that 
+    \begin{align}
+        x^* = \begin{bmatrix}
+            0 \\
+            x_{j_1} - \lambda^* t_{j_1} \\
+            \vdots \\
+            x_{j_k} - \lambda^* t_{j_k} (= 0) \\
+            \vdots \\
+            \lambda^* \\
+            \vdots \\
+            x_{j_m} - \lambda^* t_{j_m} \\
+            0 \\
+        \end{bmatrix}.
+    \end{align}
+    Then $x^*$ has no more than $m$ nonzero entries; and, since $Ax^*=b$, the nondegeneracy condition say that $x^*$ has precisely $m$ nonzero entries.
+    According to \reflemma{on_nondegeneracy}, $x^*$ is therefore a basic feasible solution.
+    Furthermore, $c^T x^* < c^T x$.
+    
+    Now define the new basis 
+    \begin{align}
+    B^* = (\underbrace{\{ j_1, \dots, j_m \}}_{B} - \{ j_k \}) \cup \{ s \},
+    \end{align}
+    by removing the index $j_k$ and adding the index $s$. 
+    Then go to step 1 again with $x^*$ replacing $x$ and $B^*$ replacing $B$.
+\end{enumerate}
+
+Each time we cycle through step 1 to step 3, the cost strictly decreases.
+Thus the same collection of basis vectors $B$ will never repeat.
+Hence the simplex algorithm terminates in a finite number of step.
+This can only occur when A1 happens which suggests we have reached an optimal solution or B1 happens which means that none exists.
+
+\begin{theorem}[Simplex algorithm finds optimal solutions]
+Assume the nondegeneracy conditions 1, 2, 3 hold, and that there exist feasible $x$ for \arefeq{LP_P}, feasible $y$ for \arefeq{LP_D}.
+Then the simplex algorithm terminates in finitely many steps, and produces a basic optimal $x_0$ for \arefeq{LP_P} and an basic optimal $y_0$ for \arefeq{LP_D}.
+\end{theorem}
+
+\begin{proof}
+If $y$ is feasible for \arefeq{LP_D}, $\inf \ \{ c^T x : Ax = b, x \ge 0 \} \ge b^T y > -\infty$,
+and so B1 cannot occur.
+Consequently, the simplex algorithm terminates at an optimal $x_0$ for \arefeq{LP_P} and $y_0$ for \arefeq{LP_D}.
+\end{proof}
+
+\subsection{Phase I}
+
+We now come back and explain how to carry Phase I of the simplex algorithm.
+This major focus of Phase I is to find a feasible solution of $Ax = b, x \ge 0$.
+The following discussions are trying to convert Phase II to Phase I.
+And in this way, we will not include other unproved definitions or theorems.
+However, alternatively we can do Gauss elimination.
+
+\begin{remark}
+To make a connection between Phase I and II, we need to modify the third nondegeneracy
+condition, to become 
+\begin{enumerate}
+    \item[3'.] $b$ cannot be written as a linear combination of fewer than $m$ columns of $\tilde{A} = [A \ I_m]$, where $I_m$ is $m \times m$ identity matrix.
+\end{enumerate}
+Note that 3' indicates $b_i \neq 0$ for all $i = 1, \dots, m$.
+\end{remark}
+
+We assume for this section that the nondegeneracy conditions 1, 2, and 3' hold.
+
+The goal of Phase I is to find $x \ge 0$ solving $Ax = b$, that is,
+\begin{align}
+\sum_{j = 1}^{n} a_{ij} x_j = b_i, (i = 1, \dots, m).
+\end{align}
+We may assume that $b_i > 0$ for otherwise we can multiply $i$-th constraint by $-1$.
+
+Now let $z$ be a vector of $m$ elements and consider the modified problem:
+\begin{align}
+\min \ & z \tag{$\tilde{P}$} \labeq{LP_tildeP} \\
+\st    & Ax + I_m z = b \nonumber \\
+       & x \ge 0 \nonumber \\
+       & z \ge 0. \nonumber
+\end{align}
+This has the form
+\begin{align*}
+\min \ & \tilde{c}^T \tilde{x} \\
+\st    & \tilde{A} \tilde{x} = \tilde{b} \\
+       & \tilde{x} \ge 0
+\end{align*}
+where $\tilde{x} = [x \ z]^T$, $\tilde{A} = [A \ I_m]$, $\tilde{b} = b$, and $\tilde{c} = [\underbrace{0 \dots 0}_{n} \ \underbrace{1 \dots 1}_{m}]^T$.
+
+Since each $b_i > 0$, a basic feasible solution of \arefeq{LP_tildeP} is $\tilde{x} = [0 \dots 0 \ b_1 \dots b_m]^T$.
+Now apply Phase II to \arefeq{LP_tildeP}: we either produce a basic optimal solution $\tilde{x}_0$ of \arefeq{LP_tildeP} or learn that none exists.
+Since $\tilde{c}^T \tilde{x} \geq 0$ for all feasible $\tilde{x}$, the latter cannot occur, as we will later see from .
+Hence Phase II provides use with a basic optimal $\tilde{x}_0 = [x \ z]^T$ for \arefeq{LP_tildeP}.
+
+There are now two possibilities to consider:
+\begin{enumerate}
+    \item[C1:] $\sum_{i=1}^{m} z_i = 0$.
+    Then $z = 0$, and therefore $\tilde{A} \tilde{x} = \tilde{b}$ implies $Ax = b, x \ge 0$.
+    So we have a basic feasible solution $x$ for \arefeq{LP_P}.
+    \item[C2:] $\sum_{i=1}^{m} z_i > 0$.
+    In this situation, \arefeq{LP_P} does not have any feasible solution $x$.
+    This is so, since if $Ax = b, x \ge 0$, then $\tilde{x}_0 = [x \ 0]^T$ would be optimal for \arefeq{LP_tildeP}, giving the cost $\tilde{c}^T \tilde{x} = \sum_{i=1}^{m} z_i = 0$.
+\end{enumerate}
+
+\section{Duality Theorem}
+
+Next we return to theory and provide an analysis of the solvability of linear programming problems in standard form \arefeq{LP_Ps} and \arefeq{LP_Ds}.
+
+We no longer need the nondegeneracy conditions from the previous section, but we do require this important assertion:
+
+\begin{theorem}[Variant of Farkas alternative]
+% \index{Variant of Farkas alternative}
+\labthm{Farkas_alt_0}
+Either 
+\begin{enumerate}
+    \item $Ax \le b, x \ge 0$ has a solution; or
+    \item $A^T y \ge 0, b^T y < 0, y \ge 0$ has a solution,
+\end{enumerate}
+but not both.
+\end{theorem}
+
+The formal proof of this theorem is postponed to \vrefthm{farkas_alternative}.
+
+\begin{theorem}[Duality Theorem for standard form problems]
+\index{Duality Theorem for standard form problems}
+Precisely one of the following occurs:
+\begin{enumerate}
+    \item Both \arefeq{LP_Ps} and \arefeq{LP_Ds} have feasible solutions.
+    In this case, both \arefeq{LP_Ps} and \arefeq{LP_Ds} have optimal solutions and
+    \begin{align}
+    \min \ \{ c^T x : Ax \ge b, x \ge 0 \} = \max \ \{ b^T y : A^T y \le c, y \ge 0 \}.
+    \end{align}
+    \item There are feasible solutions for \arefeq{LP_Ds}, but not for \arefeq{LP_Ps}. 
+    Then
+    \begin{align}
+    \sup \ \{ b^T y : A^T y \le c, y \ge 0 \} = \infty.    
+    \end{align}
+    \item There are feasible solutions for \arefeq{LP_Ps}, but not for \arefeq{LP_Ds}. 
+    Then 
+    \begin{align}
+    \inf \ \{ c^T x : Ax \ge b, x \ge 0 \} = -\infty.
+    \end{align}
+    \item Neither \arefeq{LP_Ps} nor \arefeq{LP_Ds} has feasible solutions.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Step 1:
+We introduce the compound matrix
+\begin{align}
+\hat{A} &= \begin{bmatrix}
+-A & 0 \\
+0  & A^T \\
+c^T & -b^T \\
+\end{bmatrix}_{(m+n+1) \times (n+m)} \\
+\hat{x} &= \begin{bmatrix}
+x \\
+y \\
+\end{bmatrix} \\
+\hat{b} &= \begin{bmatrix}
+-b \\
+c  \\
+0 \\
+\end{bmatrix} \\
+\hat{y} &= \begin{bmatrix}
+v \\
+u \\
+\lambda \\
+\end{bmatrix}.
+\end{align}
+
+Then \refthm{Farkas_alt_0} states that either
+\begin{enumerate}
+    \item $\hat{A} \hat{x} \le \hat{b}, \hat{x} \ge 0$ has a solution; or 
+    \item $\hat{A}^T \hat{y} \ge 0, \hat{b}^T \hat{y} < 0, \hat{y} \ge 0$ has a solution
+\end{enumerate}
+but not both.
+
+Step 2:
+If 1 holds, which means $\hat{A} \hat{x} \le \hat{b}, \hat{x} \ge 0$ has a solution, then there exist $x \in \R^n$ and $y \in \R^m$ so that $x \ge 0, y \ge 0$ and 
+\begin{align}
+\begin{bmatrix}
+-A & 0 \\
+0  & A^T \\
+c^T & -b^T \\
+\end{bmatrix}
+\begin{bmatrix}
+x \\
+y \\
+\end{bmatrix}
+\le 
+\begin{bmatrix}
+-b \\
+c  \\
+0 \\
+\end{bmatrix}.
+\end{align}
+Thus 
+\begin{align}
+-A x \le -b \\
+A^T y \le c \\
+c^T x - b^T y \le 0 \\
+x \ge 0 \\
+y \ge 0
+\end{align}
+Consequently, we have $c^T x \le b^T y \le (Ax)^T y = x^T A^T y \le x^T c$ which implies $c^T x = b^T y$.
+Hence
+\begin{align}
+A x \ge b \\
+A^T y \le c \\
+c^T x = b^T y  \\
+x \ge 0 \\
+y \ge 0
+\end{align}
+Therefore, if $x$ is feasible for \arefeq{LP_Ps} and $y$ is feasible for \arefeq{LP_Ds}, then according to \refthm{d_o} and \refremark{d_o_standard}, $c^T x = b^T y$ implies that $x$ is optimal for \arefeq{LP_Ps} and $y$ is optimal for \arefeq{LP_Ds}.
+This is the statement 1 of Duality Theorem.
+
+Step 3:
+If 2 holds, which means $\hat{A}^T \hat{y} \ge 0, \hat{b}^T \hat{y} < 0, \hat{y} \ge 0$ has a solution, then there exist $v \in \R^m, u \in \R^n, \lambda \in \R$ with $v, u, \lambda \ge 0$,
+\begin{align}
+\begin{bmatrix}
+-A^T & 0 & c \\
+0 & A & -b \\
+\end{bmatrix}
+\begin{bmatrix}
+v \\
+u \\
+\lambda \\
+\end{bmatrix}
+\ge 
+\begin{bmatrix}
+0 \\
+0 \\
+0 \\
+\end{bmatrix},
+\end{align}
+and 
+\begin{align}
+\hat{b}^T \hat{y} = [-b^T c^T 0] 
+\begin{bmatrix}
+v \\
+u \\
+\lambda \\
+\end{bmatrix}
+= -b^T v + c^T u \le 0.
+\end{align}
+That is
+\begin{align}
+-A^T v + c \lambda \ge 0 \\
+A u - b \lambda \ge 0 \\
+-b^T v + c^T u < 0\\
+v \ge 0 \\
+u \ge 0 \\ 
+\lambda \ge 0 
+\end{align}
+Next, we assert that $\lambda = 0$.
+Observe that $\lambda (b^T v) \le u^T A^T v \le u^T (c \lambda) = \lambda (c^T u)$, so $\lambda (-b^T v + c^T u) \ge 0$.
+But as $\lambda \ge 0$, it contradicts $-b^T v + c^T u < 0$ if $\lambda > 0$.
+So we have $\lambda = 0$ and 
+\begin{align}
+A^T v \le 0 \\
+A u \ge 0 \\
+c^T u \le b^T v \\
+v \ge 0 \\
+u \ge 0.
+\end{align}
+The existence of $u, v$ satisfying 2 leads us to statements 2-4 of Duality Theorem.
+The next step is to discuss the positiveness of $c^T u$.
+
+Step 4:
+If $c^T u < 0$, \arefeq{LP_Ds} has no feasible solution.
+For $A^T y \le c, y \ge 0$, 2 implies $0 \le y^T A u = (A^T y)^T u \le c^T u < 0$, which is a contradiction.
+
+If in addition \arefeq{LP_Ps} has no feasible solution, we have statement 4 of the Duality Theorem.
+If, on the other hand, \arefeq{LP_Ps} has a feasible solution $x$ solving $A x \ge b, x \ge 0$ then for all $\mu \ge 0$, we have
+\begin{align}
+A (x + \mu u) = A x + \mu A u \ge b \\
+x + \mu u \ge 0
+\end{align}
+So $x + \mu u$ is also feasible for \arefeq{LP_Ps}. 
+But then since $c^T u < 0$, $c^T (x + \mu u) = c^T x + \mu c^T u \to -\infty$ as $\mu \to \infty$.
+This is statement 3 of the Duality Theorem.
+
+Step 5:
+If $c^T u \ge 0$, \arefeq{LP_Ps} has not feasible solution.
+Assume $A x \ge b, x \ge 0$.
+Following 2, then $0 \ge x^T A^T v = (Ax)^T v \ge b^T v > c^T u \ge 0$, which is a contradiction.
+
+Also if \arefeq{LP_Ds} has no feasible solution, we have statement 4 of the Duality Theorem.
+If \arefeq{LP_Ds} has a feasible solution $y$ solving $A^T y \le c, y \ge 0$, then for all $\mu \ge 0$, we have
+\begin{align}
+A^T (y + \mu v) = A^T y + \mu A^T v \le c \\
+y + \mu v \ge 0
+\end{align}
+So $y + \mu v$ is also feasible for \arefeq{LP_Ds}.
+But then since $b^T v > c^T u \ge 0$, $b^T (y + \mu v) = b^T y + \mu b^T v \to \infty$ as $\mu \to \infty$.
+This is the statement 2 of the Duality Theorem.
+\end{proof}
+
+Let us now return to the canonical forms of our primal and dual problems: \arefeq{LP_P} and \arefeq{LP_D}.
+Since we can use slack and surplus variables to convert between the canonical and the standard form problems \arefeq{LP_Ps} and \arefeq{LP_Ds}, we like wise have a duality assertion for the canonical problems.
+
+\begin{theorem}[Duality Theorem for canonical form problems]
+\index{Duality Theorem for canonical form problems}
+Precisely one of the following occurs:
+\begin{enumerate}
+    \item Both \arefeq{LP_P} and \arefeq{LP_D} have feasible solutions.
+    In this case, both \arefeq{LP_P} and \arefeq{LP_D} have optimal solutions and
+    \begin{align}
+    \min \ \{ c^T x : Ax = b, x \ge 0 \} = \max \ \{ b^T y : A^T y \le c \}.
+    \end{align}
+    \item There are feasible solutions for \arefeq{LP_D}, but not for \arefeq{LP_P}. 
+    Then
+    \begin{align}
+    \sup \ \{ b^T y : A^T y \le c \} = \infty.    
+    \end{align}
+    \item There are feasible solutions for \arefeq{LP_P}, but not for \arefeq{LP_D}. 
+    Then 
+    \begin{align}
+    \inf \ \{ c^T x : Ax = b, x \ge 0 \} = -\infty.
+    \end{align}
+    \item Neither \arefeq{LP_P} nor \arefeq{LP_D} has feasible solutions.
+\end{enumerate}
+\end{theorem}
+
+\marginnote{
+\begin{kaocounter}
+What about general forms?
+\end{kaocounter}
+}
+
+\section{Applications}
+
+We discuss in the subsequent sections several interesting applications and extensions of linear programming.
+
+\subsection{Two-person, zero-sum matrix games}
+
+In a two-person, zero-sum matrix game, we have two participants: player I (who wants to maximize some payoff) and player II (who wants to minimize this payoff). 
+Each player selects his/her strategy without knowing what the
+other will do.
+
+For a matrix game, the payoff is determined by a given $m \times n$ payoff matrix:
+
+\begin{align}
+    \begin{bmatrix}
+        a_{11} & \cdots &        &        & a_{1n} \\
+        \vdots & \ddots &        &        & \\
+               &        & a_{ij} &        & \\
+               &        &        & \ddots & \vdots \\
+        a_{m1} &        &        & \cdots & a_{mn} \\
+    \end{bmatrix}
+\end{align}
+
+Player I selects a row index $i \in \{ 1, \dots, m \}$, and player II selects a column index $j \in \{ 1, \dots, n \}$.
+The payoff to player I is $a_{ij}$ and the loss to player II is $a_{ij}$.
+
+What are optimal strategies for the players?
+
+\begin{definition}[Saddle point]
+\labdef{saddle_point}
+\index{Saddle point}
+The $(k,l)$-th entry $a_{kl}$ of the matrix $A$ is a saddle point if 
+\begin{align}
+    \max _{1 \le i \le m} a_{il} = a_{kl} = \min _{1 \le j \le n} a_{kj}.
+\end{align}
+Equivalently, $a_{kl}$ is a saddle point if 
+\begin{align}
+    a_{il} \le a_{kl} \le a_{kj}
+\end{align}
+for all $1 \le i \le m$ and $1 \le j \le n$.
+\end{definition}
+
+\begin{theorem}[Minmax and saddle points]
+    \labthm{minmax_saddle_points}
+    The matrix A has a saddle point iff the minimax condition
+    \begin{align}
+        \min _{1 \le j \le n} \max _{1 \le i \le m} a_{ij} = \max _{1 \le i \le m} \min _{1 \le j \le n} a_{ij}
+    \end{align}
+    holds.
+\end{theorem}
+
+\begin{example}
+    For the matrix $A = \begin{bmatrix} 1 & -1 \\ -1 & 1 \\ \end{bmatrix}$, we have $\min _{j} \max _{i} a_{ij} = 1$ and $\max _{i} \min _{j} a_{ij} = -1$.
+    Therefore the minimax condition (\refthm{minmax_saddle_points}) fails.
+    So $A$ does not have a saddle points.
+\end{example}
+
+\subsection{Network flows}
+
+TODO
+
+\subsection{Transportation problem}
+
+TODO

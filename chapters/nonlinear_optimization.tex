@@ -1,0 +1,198 @@
+\setchapterstyle{kao}
+\setchapterpreamble[u]{\margintoc}
+\chapter{Nonlinear Optimization}
+\labch{nonlinear_optimization}
+
+In this chapter we examine minimization problems with inequality constraints and study when and how Lagrange multipliers can be used to characterize minimizers.
+
+\section{Inequality constraints}
+
+Assume $f, h_1, \dots, h_p : \R^n \to \R$ are continuously differentiable.
+
+As usual, we write
+\begin{align}
+h = \begin{bmatrix}
+h_1 \\
+h_2 \\
+\vdots \\
+h_p \\
+\end{bmatrix}
+\end{align}
+and 
+\begin{align}
+\grad h = \begin{bmatrix}
+(\grad h_1)^T \\
+(\grad h_2)^T \\
+\vdots \\
+(\grad h_p)^T \\
+\end{bmatrix}
+= \begin{bmatrix}
+\frac{\pp h_1}{\pp x_1} & \frac{\pp h_1}{\pp x_2} & \cdots & \frac{\pp h_1}{\pp x_n} \\
+\frac{\pp h_2}{\pp x_1} & \frac{\pp h_2}{\pp x_2} & \cdots & \frac{\pp h_2}{\pp x_n} \\
+\vdots & \vdots & \ddots & \vdots \\
+\frac{\pp h_p}{\pp x_1} & \frac{\pp h_p}{\pp x_2} & \cdots & \frac{\pp h_p}{\pp x_n} \\
+\end{bmatrix}.
+\end{align}
+
+We study in this section the constrained optimization problem to find $x_0 \in \R^n$ to 
+\begin{align}
+\min \ & f(x) \tag{NLP} \labeq{NLP} \\
+\st & h(x) \le 0 \nonumber
+\end{align}
+
+The requirement that $h_j(x) \le 0$ for $j = 1, \dots, p$ are inequality constraints.
+The $j$-th constraint is active if $h_j(x) = 0$.
+A point $x$ is feasible for \arefeq{NLP} if $h(x) \le 0$.
+
+A basic question is how to characterize $x_0$ solving \arefeq{NLP}.
+
+\subsection{Constraint qualification}
+
+Suppose hereafter $x_0$ solves \arefeq{NLP}.
+Our plan is to make a first variation calculation, but for this we need to be careful in designing an appropriate curve of variations staying within the feasible region.
+
+We write $J = \{ j \in \{1, \dots, p\} : h_j(x_0) = 0 \}$.
+These are the indices of the active constraints for $x_0$.
+
+We write $o(t)$ to denote any vector function $r(t)$ such that $\lim _ {t \to 0_+} \frac{|r(t)|}{t} = 0$.
+
+\begin{definition}
+We say the constraint qualification condition (CQ) holds at $x_0$ holds at $x_0$ if for each vector $y \in \R^n$ satisfying $y^T \grad h_j(x_0 \le 0$ for all $j \in J$, there exists a continuous curve $\{x(t) : 0 \le t < t_0 \}$ for some $t_0 > 0$ such that $h(x(t)) \le 0$ within $0 \le t < t_0$; and $x(t) = x_0 + t y + o(t)$ as $t \to 0_+$.
+\end{definition}
+
+\subsection{Karush-Kuhn-Tucker conditions}
+
+\begin{theorem}
+Let $x_0$ solve \arefeq{NLP} and suppose the constraint qualification condition holds at $x_0$.
+Then there exist a vector of real numbers $\mu_0 = [\mu_0^1, \dots, \mu_0^p]^T \ge 0$ such that 
+\begin{align}
+\grad f(x_0) + \mu_0^T \grad h(x_0) = 0.
+\end{align}
+Furthermore, the vector $\mu_0$ satisfies
+\begin{align}
+\mu_0^T h(x_0) = 0.
+\end{align}
+\end{theorem}
+
+We interpret $\mu_0^j$ as the Lagrange multiplier for the constraint $h_j(x_0) \le 0$. 
+So for our inequality constrained problem \arefeq{NLP}, we are asserting both that Lagrange multipliers exist and that they are nonnegative.
+
+In addition, if $h_j(x_0) < 0$ for some index $j$, that constraint is inactive and so the corresponding Lagrange multiplier $\mu_0^j$ equals zero.
+This is a complementary slackness condition.
+
+\begin{proof}
+Step 1.
+Assume that the vector $y$ satisfies $y^T \grad h_j(x_0) \le 0$ for $j \in J$.
+Let $\{ x(t) : 0 \le t < t_0 \}$ be the corresponding curve, whose existence is assured according to CQ.
+Write $\phi(t) = f(x(t))$.
+Then $\phi(0) = f(x_0) \le f(x(t)) = \phi(t)$ for $0 \le t < t_0$, since $x_0$ solves \arefeq{NLP}.
+Thus $phi$ has a minimum at $t = 0$ and hence $\phi'(0) \ge 0$.
+Now $\phi'(0) = \grad f(x_0) ^T x'(0) = \grad f(x_0) ^T y$ and therefore $\grad f(x_0) ^T y \ge 0$ for all $y$ satisfying $y^T \grad h_j(x_0) \le 0$ for $j \in J$. 
+
+Step 2.
+Recall that \refthm{farkas_alternative} states:
+For an $m \times n$ matrix $A$ and $b \in \R^m$, either 
+\begin{enumerate}
+    \item $A x = b, x \ge 0$ has a solution $x \in \R^n$; or
+    \item $A^T y \ge 0, b^T y < 0$ has a solution $y \in \R^m$,
+\end{enumerate}
+but not both.
+
+We apply this to 
+\begin{align}
+A &= - \underbrace{[\grad h_{j_1} (x_0) \ \grad h_{j_2} (x_0)\ \cdots \ \grad h_{j_k} (x_0) ]}_{\text{columns}}, \\
+b &= \grad f(x_0),
+\end{align}
+where $J = \{j_1, j_2, \dots, j_k\}$.
+In Step 1, we have shown that $A^T y \ge 0$ implies $y^T b \ge 0$ and thus fails.
+
+Consequently, 2 holds: there exists $\sigma_j \ge 0$ for $j \in J$ such that 
+\begin{align}
+- \sum_{j \in J} \sigma_j \grad h_j(x_0) = \grad f(x_0).
+\end{align}
+Define $\mu _0 \in \R^p$ by
+\begin{align}
+\mu_0^j = \begin{cases}
+\sigma_j, & j \in J \\
+0, & j \notin J \\
+\end{cases}
+\end{align}
+then $\mu_0 \ge 0$, $\mu_0^T h(x_0) = 0$ and $ \grad f(x_0) + \mu_0^T h(x_0) = 0$.
+\end{proof}
+
+\subsection{When does the constraint qualification condition hold?}
+
+The above proof is elegant, but it may be far from clear for particular problems if the constraint qualification condition is valid. We discuss next two important cases.
+
+\subsubsection{Linear inequality and equality constraints}
+
+\begin{theorem}
+If the functions $\{ h_j \}_{j=1}^{p}$ are linear (or affine) functions of $x$, then (CQ) holds for each point $x_0$.
+\end{theorem}
+
+\subsubsection{Regular equality constraints}
+
+\begin{definition}
+We say that $x_0$ is regular for \arefeq{NLP} if $\{ \grad h_j(x_0) \}_{j \in J}$ are linearly independent in $\R^n$ where $J = \{ j \in \{1, \dots, p\} : h_j(x_0) = 0 \}$.
+\end{definition}
+
+\begin{theorem}
+If $x_0$ is regular for \arefeq{NLP} then (CQ) holds at $x_0$.
+\end{theorem}
+
+\section{More on Lagrange multipliers}
+
+Given $f, g_1, \dots, g_m, h_1, \dots, h_p : \R^n \to \R$, we write 
+\begin{align}
+g = \begin{bmatrix}
+g_1 \\
+g_2 \\
+\vdots \\
+g_m \\
+\end{bmatrix} \\
+h = \begin{bmatrix}
+h_1 \\
+h_2 \\
+\vdots \\
+h_p \\
+\end{bmatrix}.
+\end{align}
+Our minimization problem for this section is to find $x_0 \in \R^n$ to 
+\begin{align}
+\min \ & f(x) \tag{NLP*} \labeq{NLPs} \\
+\st    & g(x) = 0 \nonumber \\
+       & h(x) \le 0 \nonumber
+\end{align}
+So there are $m$ equality constraints and $p$ inequality constraints.
+
+\subsection{F. John's formulation}
+
+\begin{theorem}
+Suppose that $x_0$ solves the constrained optimization problem \arefeq{NLPs}.
+Then there exists real number $\gamma_0$ and real-valued vectors $\lambda_0, \mu_0$ not all equal to zero such that 
+\begin{align}
+\gamma_0 \grad f(x_0) + \lambda_0^T \grad g(x_0) + \mu_0^T \grad h(x_0) = 0
+\end{align}
+and 
+\begin{align}
+\gamma_0 \ge 0, \mu_0 \ge 0, \mu_0^T h(x_0) = 0.
+\end{align}
+\end{theorem}
+
+\begin{remark}
+For $\gamma_0 > 0$, by dividing $\lambda_0, \mu_0$ by $\gamma_0$, we convert F. John's condition to KKT conditions.
+If $\gamma_0 = 0$, we call it an abnormal multiplier.
+\end{remark}
+
+\section{Quadratic programming}
+
+The quadratic programming is to find $x_0 \in \R^n$ to 
+\begin{align}
+\min \ & \frac{1}{2} x^T C x + c^T x \tag{QP} \labeq{QP} \\
+\st    & A x = b \nonumber \\
+       & x \ge 0 \nonumber
+\end{align}
+where $C$ is a symmetric $n \times n$ matrix.
+
+The problem \arefeq{QP} is of the form \arefeq{NLPs} for $f(x) = \frac{1}{2} x^T C x + c^T x$, $g = Ax - b$, $h = -x$.
+
