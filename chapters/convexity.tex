@@ -59,6 +59,8 @@ This means that $x^*$ has at most $n+1$ nonzero entries $\{ x_{j_1}, \dots, x_{j
 Then relabel $\theta_k = x_{j_k}$ for $k = 1, \dots, n+1$.
 \end{proof}
 
+Any element belongs to $n$-dimensional convex polytope can be represented by a convex combination of atmost $n+1$ vectors. 
+
 \subsection{Separating hyperplanes}
 
 We discuss now the geometry of convex sets and of hyperplanes. 
@@ -69,6 +71,10 @@ Let $C$ be a nonempty, closed, convex, subset of $\R^n$ and suppose $0 \notin C$
 Then there exists a unique point $x_0 \in C$ such that $|x_0| = \min \ \left\{ |x| : x \in C \right\}$.
 Furthermore, $0 \le x_0 ^T (x-x_0)$ for all $x \in C$.
 \end{lemma}
+
+For a convex set $C$ that does not contain the origin, we can find a point $x_0$ that is closest to the origin. 
+Then, draw a line perpendicular to the line connects the origin and $x_0$ at $x_0$.
+And we find out that the convex set $C$ is (not strictly) on one side of the perpendicular line.
 
 \begin{proof}
 Step 1:
@@ -104,7 +110,7 @@ Sending $\theta \to 0$, we have $0 \le x_0 ^T (x-x_0)$.
 \begin{definition}[Hyperplane]
 Let $a \in \R^n, b \in \R$.
 An expression of the form $a^T x + b = 0$ determines a hyperplane in $\R^n$.
-The hyperplane is $\{ x : \in \R^n : a^T x + b = 0 \}$.
+The hyperplane is $\{ x \in \R^n : a^T x + b = 0 \}$.
 \end{definition}
 
 It is an $(n-1)$-dimensional affine subspace and passes through the origin if and only if $b = 0$.
@@ -153,7 +159,7 @@ As a first application of separating hyperplanes, we discuss next a geometric fo
 \begin{definition}[Polar dual]
 \labdef{polar_dual}
 Let $C \subset \R^n$ be closed and convex, with $0 \in C$.
-Its polar dual is the set $C^0 = \{ y \in R^n: x^T y \le 1, \forall x \in C \}$.
+Its polar dual is the set $C^0 = \{ y \in \R^n: x^T y \le 1, \forall x \in C \}$.
 \end{definition}
 
 \begin{theorem}[Dual convex sets]
