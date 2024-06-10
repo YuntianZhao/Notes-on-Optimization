@@ -10,7 +10,7 @@ Linear optimization theory, most commonly known as linear programming, concerns 
 \subsection{Basic concepts}
 
 Before start, we introduce some notations.
-If $x = [x_1 \dots x_n]^T \in \R^n$, we write $x \ge 0$ to mean that $x_i \ge 0$ for all $i = 1, \dots, n$.
+If $x = [x_1 \cdots x_n]^T \in \R^n$, we write $x \ge 0$ to mean that $x_i \ge 0$ for all $i = 1, \dots, n$.
 Similarly, $x > 0$ means that $x_i > 0$ for all $i = 1,\dots, n$.
 
 We have $x \ge y$ if $x_i \ge y_i$ for all $i = 1, \dots, n$ and $x > y$ if $x_i > y_i$ for all $i = 1, \dots, n$.
@@ -341,7 +341,7 @@ If $Ax = b, x \ge 0$ and $x$ has precisely $m$ non-zero entries, then $x$ is a b
 \end{lemma}
 
 \begin{proof}
-Let $x = [0 x_{j_1} 0 \dots x_{j_m} \dots 0]^T$, where $x_{j_1}, \dots x_{j_m} > 0$, and write $B = \{ j_1, \dots, j_m \}$.
+Let $x = [0 x_{j_1} 0 \cdots x_{j_m} \cdots 0]^T$, where $x_{j_1}, \dots, x_{j_m} > 0$, and write $B = \{ j_1, \dots, j_m \}$.
 To show that $x$ is a basic feasible solution, We must prove that the columns $\{ a^{j_1}, \dots, a^{j_m} \}$ are independent. 
 
 We know that $\sum _{j \in B} x_j a^j = b$.

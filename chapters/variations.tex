@@ -136,7 +136,7 @@ A point $x \in \R^n$ is called feasible for if $g(x) = 0$; that is, if $g_k(x) =
 
 \subsection{Lagrange multipliers}
 
-The method of Lagrange multipliers reveals a linear relationship between the gradients of $f, g1, \dots, gm$ at a minimizer $x_0$.
+The method of Lagrange multipliers reveals a linear relationship between the gradients of $f, g_1, \dots, g_m$ at a minimizer $x_0$.
 
 \subsection{Constrained first variation}
 
@@ -228,8 +228,8 @@ Then
 \end{align}
 for
 \begin{align}
-\gamma_\alpha  &= (1+\alpha^2|g(x_\alpha)|^2)^{1/2} \\
-\lambda_\alpha &= \gamma_\alpha \alpha g(x_\alpha)
+\gamma_\alpha  &= (1+\alpha^2|g(x_\alpha)|^2)^{1/2}, \\
+\lambda_\alpha &= \gamma_\alpha \alpha g(x_\alpha).
 \end{align}
 
 Step 4: Now $\gamma_\alpha^2 + \lambda_\alpha^2 = 1$ and therefore $\{(\gamma_\alpha, \lambda_\alpha)\}_{\alpha >0}$ is bounded.
@@ -400,6 +400,41 @@ f(x_0+y)-f(x_0) &= |A(x_0+y) -b|^2 - |Ax_0-b|^2 \\
 &= |Ay|^2 \ge 0. \nonumber
 \end{align}
 \end{proof}
+
+\subsection{Fluid equilibra}
+
+Suppose that we have sitting on a table $n$ differently shaped containers, which we connect with tubes at their bases, to allow water to flow freely between them.
+We then pour a volume $V$ of water, which flows freely among the containers.
+We will use Lagrange multipliers to demonstrate a version of Pascal's principle, that at equilibrum the heights of the fluid in each container are all equal, regardless of the shapes of the individual vessels.
+
+To see this, let us denote the cross sectional area of $k$-th container at distance $y$ above the table by $a_k(y) > 0$.
+Then if $x_k$ is the height of water in that $k$-th container, the volume of water within is $\int_0^{x_k} a_k(y) \dd y$ and the gravitational potential energy of the water in that container is proportional to $\int_0^{x_k} y a_k(y) \dd y$.
+The physical principle is that the water will minimize the total potential energy
+\begin{align}
+    f(x_1, \dots, x_n) = \sum_{k=1}^{n} \int _0^{x_k} y a_k(y) \dd y,
+\end{align}
+subject to the volume constraint
+\begin{align}
+    g(x_1, \dots, x_n) = \left(\sum_{k=1}^{n} \int _0^{x_k} a_k(y) \dd y \right) - V = 0.
+\end{align}
+
+Since $\grad g \ne 0$, the optimal heights $x_0 = [x_1^0 \cdots x_n^0]^T$ satisfy $\grad f(x_0) = \lambda_0 \grad g(x_0) = 0$.
+Since $\frac{\pp f}{\pp x_k} = x_k a_k(x_k)$ and $\frac{\pp g}{\pp x_k} = a_k(x_k)$, we have $x_k^0 a_k(x_k^0) + \lambda_0 a_k(x_k^0) = 0$ for $k = 1, \dots, n$.
+And hence $x_k^0 = -\lambda_0$ for all $k = 1, \dots, n$.
+In particular, the Lagrange multiplier is minus the common height of the water in various containers. 
+\subsection{Maximizing entropy}
+
+\begin{align}
+    P = \left\{ p \in \R^m: \sum_{i=1}^{m} p_i = 1, p_i \ge 0 \right\}
+\end{align}
+
+For each $p \in P$, the corresponding Shannon entropy is
+\begin{align}
+    e(p) = - \sum_{i=1}^{m} p_i \log(p_i),
+\end{align}
+with the convention that $0 \log 0 = 0$. 
+
+A fundamental question in statistical physics is to find which distrutions $p_0 \in P$ maximize the entropy, subjects to various constraints.
 
 \subsection{Roots of polynomials}
 

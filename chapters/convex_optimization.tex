@@ -7,3 +7,43 @@ We now make additional convexity assumptions, which will let us greatly
 strengthen the theory from the previous chapter.
 
 \section{Variational inequalities}
+
+Let $C \subset \R^n$ be a convex set.
+We begin with the basic optimization problem of finding $x_0$ to
+
+\begin{align}
+    \min f(x), \st x \in C. \tag{C}
+\end{align}
+
+\begin{theorem}
+    If $f: \R^n \to \R$ is continuously differentiable and $x_0$ solves , then 
+    \begin{align}
+        \grad f(x_0)^T (x-x_0) \ge 0, \text{ for all } x \in C. \tag{VI}
+    \end{align}
+    Moreover, suppose also that $f$ is convex.
+    Then if $x_0 \in C$ satisfies , $x_0$ solves the minimization problem .
+\end{theorem}
+
+\begin{proof}
+    Let $x \in C$.
+    Then $x_0 + t(x - x_0) = t x + (1-t) x_0 \in C$ for $0 \le t \le 1$.
+    Thus if $x_0$ solves , it follows that $\phi(t) = f(x_0 + t(x - x_0))$ has its minimum for $0 \le t \le 1$ at $t = 0$.
+    Therefore $\phi'(0) \ge 0$.
+    But $\phi'(t) = \grad f(x_0 + t(x - x_0))^T (x-x_0)$ and hence $\phi'(0) = \grad f(x_0)^T (x-x_0) \ge 0$.
+    
+    If $f$ is convex and continuously differentiable, then $f(x) \ge f(x_0) + \grad f(x_0)^T (x-x_0)$.
+    Since $\grad f(x_0)^T (x-x_0) \ge 0$, $f(x) \ge f(x_0)$ for all $x \in C$.
+\end{proof}
+
+\section{Convexity and Lagrange multipliers}
+
+\subsection{Sufficient condition for minimality}
+
+\subsection{Slater's condition}
+
+\begin{definition}
+    We say that Slater's condition for holds provided
+    \begin{align}
+        \text{there exists}
+    \end{align}
+\end{definition}
