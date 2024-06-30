@@ -1019,6 +1019,7 @@
 	\RequirePackage[force]{filehook} % Fixes an error
 	\RequirePackage{unicode-math} % Math fonts in xetexorluatex
     \RequirePackage{libertinus-otf}
+	\RequirePackage{}
 	\setromanfont[
 		Scale=1.04
 	]{Libertinus Serif}
@@ -1027,9 +1028,9 @@
 	]{Libertinus Sans}
 	\setmonofont[
 		Scale=.89
-	]{Liberation Mono}
+	]{Libertinus Mono}
 	\setmathfont{Libertinus Math}
-    \setmathfont{XITS Math}[StylisticSet=1, range=cal]
+    \setmathfont{XITSMath-Regular}[StylisticSet=1, range=cal, Extension = .otf, BoldFont = XITSMath-Bold]
     \ifluatex
     \else
         \RequirePackage{morewrites} % Fix some errors related to floats
