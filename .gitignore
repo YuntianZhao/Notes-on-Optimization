@@ -6,3 +6,4 @@ main.nlo
 main.run.xml
 main.synctex.gz
 main.xdy
+*.DS_Store
